@@ -9,13 +9,11 @@ const io = socketio(server);
 io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.on("from_client", () => {
-        console.log("evnt comming on client");
+    socket.on("msg_send", (data) => {
+        // io.emit("msg_rcvd", data); // for all the clients
+        // socket.emit("msg_rcvd", data); // for the same client
+        socket.broadcast.emit("msg_rcvd", data); // for the other client
     });
-
-    setInterval(() => {
-        socket.emit("from_server");
-    }, 2000);
 });
 
 app.use("/", express.static(__dirname + "/public"));
